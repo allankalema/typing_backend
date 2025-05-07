@@ -1,23 +1,20 @@
-"""
-URL configuration for backend project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.authtoken import views
+from accounts import views as account_views
+from typings import views as typing_views
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path('admin/', admin.site.urls),
+    
+    # Authentication
+    path('api/register/', account_views.UserRegisterView.as_view(), name='register'),
+    path('api/login/', account_views.UserLoginView.as_view(), name='login'),
+    path('api/logout/', account_views.UserLogoutView.as_view(), name='logout'),
+    path('api/user/', account_views.UserDetailView.as_view(), name='user-detail'),
+    
+    # Typing app
+    path('api/passages/', typing_views.TextPassageList.as_view(), name='passage-list'),
+    path('api/sessions/', typing_views.TypingSessionCreate.as_view(), name='session-create'),
+    path('api/progress/', typing_views.UserProgressView.as_view(), name='user-progress'),
 ]
